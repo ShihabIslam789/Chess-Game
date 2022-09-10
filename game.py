@@ -1,31 +1,32 @@
 import pygame
 import os
 
-board = pygame.transform.scale2x(pygame.image.load(os.path.join("chess_pics","board_alt.png")))
-black_bishop = pygame.image.load(os.path.join("chess_pics","black_bishop.png"))
-black_king = pygame.image.load(os.path.join("chess_pics","black_king.png"))
-black_knight = pygame.image.load(os.path.join("chess_pics","black_knight.png"))
-black_pawn = pygame.image.load(os.path.join("chess_pics","black_pawn.png"))
-black_queen = pygame.image.load(os.path.join("chess_pics","black_queen.png"))
-black_rook = pygame.image.load(os.path.join("chess_pics","black_rook.png"))
+board = pygame.image.load(os.path.join("images","board.png")), (750,750)
 
-white_bishop = pygame.image.load(os.path.join("chess_pics","white_bishop.png"))
-white_king = pygame.image.load(os.path.join("chess_pics","white_king.png"))
-white_knight = pygame.image.load(os.path.join("chess_pics","white_knight.png"))
-white_pawn = pygame.image.load(os.path.join("chess_pics","white_pawn.png"))
-white_queen = pygame.image.load(os.path.join("chess_pics","white_queen.png"))
-white_rook = pygame.image.load(os.path.join("chess_pics","white_rook.png"))
+black_bishop = pygame.image.load(os.path.join("images","black_bishop.png"))
+black_king = pygame.image.load(os.path.join("images","black_king.png"))
+black_knight = pygame.image.load(os.path.join("images","black_knight.png"))
+black_pawn = pygame.image.load(os.path.join("images","black_pawn.png"))
+black_queen = pygame.image.load(os.path.join("images","black_queen.png"))
+black_rook = pygame.image.load(os.path.join("images","black_rook.png"))
+
+white_bishop = pygame.image.load(os.path.join("images","white_bishop.png"))
+white_king = pygame.image.load(os.path.join("images","white_king.png"))
+white_knight = pygame.image.load(os.path.join("images","white_knight.png"))
+white_pawn = pygame.image.load(os.path.join("images","white_pawn.png"))
+white_queen = pygame.image.load(os.path.join("images","white_queen.png"))
+white_rook = pygame.image.load(os.path.join("images","white_rook.png"))
 
 b = [black_bishop,black_king,black_knight,black_pawn, black_queen, black_rook]
 w = [white_bishop,white_king,white_knight,white_pawn, white_queen, white_rook]
 B =[]
 W =[]
 
-for chess_pics in b:
-    B.append(pygame.transform.scale2x(chess_pics))
+for images in b:
+    B.append(pygame.transform.scale2x(images))
 
-for chess_pics in w:
-    W.append(pygame.transform.scale2x(chess_pics))
+for images in w:
+    W.append(pygame.transform.scale2x(images))
 
 def redraw_gamewindow():
     global win
@@ -37,11 +38,13 @@ def main():
     clock = pygame.time.Clock()
     run = True
     while run:
-        clock.time(15)
+        clock.time(30)
         redraw_gamewindow()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                run =  False
+                quit()
                 pygame.quit()
             
             if event.type == pygame.mousemotion:
