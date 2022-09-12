@@ -39,7 +39,7 @@ class Piece:
         self.col = col
         self.color = color
 
-    def move(self):
+    def valid_moves(self):
         pass
 
     def isSelected(self):
@@ -69,17 +69,30 @@ class King(Piece):
     img = 1
 class Knight(Piece):
     img = 2
+
 class Pawn(Piece):
     img = 3
-    def__init__(self):
+    def __init__(self):
         super().__init__(row,col,color)
         self.first = True
         self.queen  = False
 
-    def move(self, board):
-    i = self.row
-    j = self.col
-    
+    def valid_moves(self, board):
+        i = self.row
+        j = self.col
+
+        moves = []
+        if self.first:
+            if i < 7:
+                p = board[i+1][j]
+                if p == 0:
+                    moves.append((j,i+1))
+            if i < 6:
+                p = board[i+2][j]
+                if p == 0:
+                    moves.append((j,i+2))
+            
+            return moves
     
 
 class Queen(Piece):
