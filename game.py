@@ -1,40 +1,29 @@
 import pygame
 import os
 
-board = pygame.image.load(os.path.join("images","board.png")), (750,750)
-
-black_bishop = pygame.image.load(os.path.join("images","black_bishop.png"))
-black_king = pygame.image.load(os.path.join("images","black_king.png"))
-black_knight = pygame.image.load(os.path.join("images","black_knight.png"))
-black_pawn = pygame.image.load(os.path.join("images","black_pawn.png"))
-black_queen = pygame.image.load(os.path.join("images","black_queen.png"))
-black_rook = pygame.image.load(os.path.join("images","black_rook.png"))
-
-white_bishop = pygame.image.load(os.path.join("images","white_bishop.png"))
-white_king = pygame.image.load(os.path.join("images","white_king.png"))
-white_knight = pygame.image.load(os.path.join("images","white_knight.png"))
-white_pawn = pygame.image.load(os.path.join("images","white_pawn.png"))
-white_queen = pygame.image.load(os.path.join("images","white_queen.png"))
-white_rook = pygame.image.load(os.path.join("images","white_rook.png"))
-
-b = [black_bishop,black_king,black_knight,black_pawn, black_queen, black_rook]
-w = [white_bishop,white_king,white_knight,white_pawn, white_queen, white_rook]
-B =[]
-W =[]
-
-for images in b:
-    B.append(pygame.transform.scale2x(images))
-
-for images in w:
-    W.append(pygame.transform.scale2x(images))
+board = pygame.transform.scale(pygame.image.load(os.path.join("images","board.png")), (750,750))
+rect = (113,113,525,525)
 
 def redraw_gamewindow():
-    global win
+    global win, bo
     win.blit(board,(0,0))
+    bo.draw(win)
     pygame.display.update()
 
-
+def click():
+    #return pos(x,y) ranges of 0-7
+    x = pos[0]
+    y = pos[1]
+    if rect[0] < x < rect[0] + rect[2]:
+        if rect[1] < y < rect[1] + rect[3]:
+            divX = x - rect[0] 
+            divY = y - rect[0] 
+            i = int(divX/(rect[2]/8))
+            j = int(divY/(rect[3]/8))
+            return (i,j)
 def main():
+    global board
+    bo = board(8,8)
     clock = pygame.time.Clock()
     run = True
     while run:
@@ -51,10 +40,14 @@ def main():
                 pass
 
             if event.type == pygame.mousebuttondown:
-                pass
+                pos = pygame.mouse.get_pos()
+                i,j = click(pos)
+                #bo.board.selected[i][j].selected = True        
+                bo.selected(i,j)
+                
 
-width = 600
-height = 600
+width = 750
+height = 750
 win = pygame.display.set_mode((width,height))
 pygame.display.set_caption("Chess Game")
 main()
