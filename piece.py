@@ -86,7 +86,18 @@ class Bishop(Piece):
                     break
 
                 djl += 1
+        for di in range(i-1,-1,-1):
+            if djr > -1:
+                p = board[di][djr]
+                if p == 0:
+                    moves.append((djr,di))
+                elif p.color != self.color:
+                    moves.append((djr,di))
+                    break
+                else:
+                    break
 
+                djr -=1
 class King(Piece):
     img = 1
 class Knight(Piece):
@@ -103,18 +114,18 @@ class Pawn(Piece):
     def valid_moves(self, board):
         i = self.row
         j = self.col
-        if i < 7:
-            p = board[i+1][j]
-            if p != 0:
-                if self.first:
 
-                else:
-                    return:
         moves = []
-        if self.first:
+        if self.color == 'b':
             if i < 7:
                 p = board[i+1][j]
-                if p == 0:
+                if p != 0:
+                    moves.append((j,i +1))
+
+        # Diagonal movement
+            if i < 7:
+                p = board[i+1][j + 1]
+                if p != 0:
                     moves.append((j,i+1))
             if i < 6:
                 p = board[i+2][j]
