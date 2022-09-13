@@ -126,13 +126,23 @@ class Pawn(Piece):
             if i < 7:
                 p = board[i+1][j + 1]
                 if p != 0:
-                    moves.append((j,i+1))
-            if i < 6:
-                p = board[i+2][j]
+                    if p.color != self.color:
+                        moves.append((j+1,i+1))
+            if j > 0:
+                p = board[i+1][j-1]
+                if p != 0:
+                     if p.color != self.color:
+                            moves.append((j-1, i+1))
+
+            if self.first:
+                if i < 6:
+                    p = board[i+2][j]
                 if p == 0:
+                    if board[i+1][j] == 0:
+                        moves.append((j,i+2))
+                elif p.color != self.color:
                     moves.append((j,i+2))
             
-            return moves
     
 
 class Queen(Piece):
