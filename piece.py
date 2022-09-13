@@ -1,4 +1,3 @@
-from operator import truediv
 import pygame
 import os
 from piece import Bishop
