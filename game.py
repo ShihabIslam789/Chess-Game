@@ -1,7 +1,10 @@
 import pygame
 import os
+import time
+
 
 board = pygame.transform.scale(pygame.image.load(os.path.join("images","board.png")), (750,750))
+chessbg = pygame.image.load(os.path.join("images","chess.bg,jpg"))
 rect = (113,113,525,525)
 
 def redraw_gamewindow():
