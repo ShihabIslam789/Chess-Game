@@ -1,3 +1,4 @@
+from operator import truediv
 import pygame
 import os
 from piece import Bishop
@@ -64,6 +65,28 @@ class Piece:
 class Bishop(Piece):
     img = 0
 
+    def valid_moves(self,board):
+        i = self.row
+        j = self.col
+
+        moves = []
+
+        #top right diag
+        djr = j +1
+        djl = j - 1
+        for di in range(i-1,-1,-1):
+            if djl < 8:
+                p = board[di][djl]
+                if p == 0:
+                    moves.append((djl,di))
+                elif p.color != self.color:
+                    moves. append((djl,di))
+                    break
+                else:
+                    break
+
+                djl += 1
+
 class King(Piece):
     img = 1
 class Knight(Piece):
@@ -75,11 +98,18 @@ class Pawn(Piece):
         super().__init__(row,col,color)
         self.first = True
         self.queen  = False
+        self.pawn = True
 
     def valid_moves(self, board):
         i = self.row
         j = self.col
+        if i < 7:
+            p = board[i+1][j]
+            if p != 0:
+                if self.first:
 
+                else:
+                    return:
         moves = []
         if self.first:
             if i < 7:
@@ -98,7 +128,50 @@ class Queen(Piece):
     img = 4
 
     def move(self,board):
-    pass
+        i = self.row
+        j = self.col
+
+    moves = []
+
+    currentCol = j
+    for row in range(0,8):
+        if CurrentCol = 1 >= 0:
+            m1
 
 class Rook(Piece): 
     img = 5
+
+    def valid_moves(self,board):
+            i = self.row
+            j = self.col
+            moves = []
+        #up
+            for x in range(i,-1,-1):
+                p = board[i][j]
+                if p == 0:
+                    moves.append((j,x))
+                    break
+
+        #down
+            for x in range(i,8,-1):
+                p = board[i][j]
+                if p == 0:
+                    moves.append((j,x))
+                    break
+
+
+        #left
+            for x in range(j,-8,-1):
+                p = board[i][j]
+                if p == 0:
+                    moves.append((x,i))
+                    break
+
+
+        #right
+            for x in range(j,8,-1):
+                p = board[i][j]
+                if p == 0:
+                    moves.append((x,i))
+                    break
+
