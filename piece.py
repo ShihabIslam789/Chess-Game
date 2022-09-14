@@ -142,8 +142,35 @@ class Pawn(Piece):
                         moves.append((j,i+2))
                 elif p.color != self.color:
                     moves.append((j,i+2))
-            
-    
+            # White
+            else:
+
+                if i > 0:
+                    p = board [i-1][j]
+                    if p == 0:
+                        moves.append((j,i-1))
+                
+                if j < 7:
+                    p = board[i-1][j+1]
+                    if p == 0:
+                        moves.append((j,i-1))
+
+                if j > 0:
+                    p = board[i-1][j+1]
+                    if p != 0:
+                        if p.color != self.color:
+                            moves.append(j+1,i-1)
+
+                if self.first:
+                    if i > 1:
+                        p = board[i-2][j]
+                        if p == 0:
+                            if board[i-1][j] == 0:
+                                moves.append(j,i-2)
+                        elif p.color != self.color:
+                            moves.append((j,i-2))
+        return moves
+
 
 class Queen(Piece):
     img = 4
