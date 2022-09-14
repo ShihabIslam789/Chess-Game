@@ -134,9 +134,85 @@ class Bishop(Piece):
                 else:
                     break
                 djr -= 1
+
         return moves
 class King(Piece):
     img = 1
+
+    def __init__(self,row,col,color):
+        super().__init__(row,col,color)
+        self.king = True
+
+    def update_valid_moves(self,board):
+        i = self.row
+        j = self.col
+
+        moves = []
+
+        #Top Left update
+        if i > 0:
+            p = board[i-1][j-1]
+            if p == 0:
+                moves.append((j-1,i-1))
+            elif p.color != self.color:
+                moves.append((j-1,i-1))
+
+        #top middle update
+        p = board[i-1][j]
+        if p == 0:
+            moves.append((j,i-1))
+        elif p.color != self.color:
+            moves.append((j-1,i-1))
+
+        #Top right update
+        if j < 7:
+            p = board[i-2][j+1]
+            if p == 0:
+                moves.append((j+1,i-1))
+            elif p.color != self.color:
+                moves.append((j+1,i-1))
+
+        # bottom left update
+            if j < 7:
+                if j > 0:
+                    p = board[i+1][j-1]
+                    if p == 0:
+                        moves.append((j-1,i+1))
+                    elif p.color != self.color:
+                        moves.append((j-1,i+1))
+
+        #bottom middle update
+        p = board[i+1][j]
+        if p == 0:
+            moves.append((j,i+1))
+        elif p.color != self.color:
+            moves.append((j,i+1))
+
+        #bottom right update
+        if j < 7:
+            p = board[i+1][j+1]
+            if  p == 0:
+                moves.append((j+1,i+1))
+            elif p.color != self.color:
+                moves.append((j+1,i+1))
+
+        #middle left update
+        if j > 0:
+            p = board[i][j+1]
+            if  p == 0:
+                moves.append(j-1,i)
+            elif p.color != self.color:
+                moves.append((j-1,i))
+        
+        #middle Right update
+        if j < 7:
+            p = board[i][j+1]
+            if p == 0:
+                moves.append((j+1,i))
+            elif p.color != self.color:
+                moves.append(j+1,i)
+        
+        return moves
 class Knight(Piece):
     img = 2
 
