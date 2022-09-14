@@ -2,7 +2,7 @@ from operator import truediv
 import pygame
 import os
 from piece import Bishop
-board = pygame.transform.scale2x(pygame.image.load(os.path.join("images","board_alt.jpg")), (750,750))
+
 
 black_bishop = pygame.image.load(os.path.join("images","black_bishop.png"))
 black_king = pygame.image.load(os.path.join("images","black_king.png"))
@@ -24,43 +24,51 @@ B =[]
 W =[]
 
 for images in b:
-    B.append(pygame.transform.scale(images, (55,65)))
+    B.append(pygame.transform.scale(images, (55,55)))
 
 for images in w:
-    W.append(pygame.transform.scale(images(55,65)))
+    W.append(pygame.transform.scale(images(55,55)))
 
 class Piece:
     img = -1
     rect = (113,113,525,525)
     startX = rect[0]
-    startY = [1]
+    startY = rect[1]
+
     def __init__(self, row, col, color):
         self.row = row
         self.col = col
         self.color = color
+        self.selected = False
+        self.move_list = []
+        self.king = False
+        self.pawn = False
 
-    def valid_moves(self):
-        pass
+    def update_valid_moves(self):
+        self.move_list = self.valid_moves(board)
 
     def isSelected(self):
-        return self.Selected
+        return self.selected
 
     def draw(self, win):
         if self.color == "w":
             drawThis = W[self.img]
         else:
             drawThis = B[self.img]
+        x = (4 - self.col) + round(self.startX + (self.col* self.rect[2]/8))
+        y = 3 + round(self.startY + (self.row * self.rect[3]/8))
 
-        if self.Selected:
-            pygame.draw.rect(win, (255,0,0), ())
+        if self.selected and self.color == color:
+            pygame.draw.rect(win,(255,0,0),(x,y,62,62),4)
 
-        x = 5 + round(self.startX + (self.col*self.rect[2]/8))
-        y = 5 + round(self.startY + (self.row*self.rect[3]/8))
+        win.blit(drawThis,(x,y))
 
-        if self.Selected:
-            pygame.draw.rect(win, (255,0,0), (x,y,55,55),2)
+    def change_pos(self, pos):
+        self.row = pos[0]
+        self.col = pos[1]
 
-        win.blit(drawThis, (x,y))
+    def __str__(self):
+        return str(self.col) + " " + str(self.row)
 
 class Bishop(Piece):
     img = 0
@@ -86,6 +94,7 @@ class Bishop(Piece):
                     break
 
                 djl += 1
+
         for di in range(i-1,-1,-1):
             if djr > -1:
                 p = board[di][djr]
@@ -98,6 +107,34 @@ class Bishop(Piece):
                     break
 
                 djr -=1
+
+        # top left diagonal
+        djl = j+1
+        djr = j-1
+        for di in range (i+1,8):
+            if djl < 8:
+                p = board[di][djl]
+                if p == 0:
+                    moves.append((djl,di))
+                elif p.color != self.color:
+                    moves.append((djl,di))
+                    break
+                else:
+                    break
+                djl += 1
+
+        for di in range(i+1,8):
+            if djr > -1:
+                p = board[di][djr]
+                if p ==0:
+                    moves.append((djr,di))
+                elif p.color != self.color:
+                    moves.append((djr,di))
+                    break
+                else:
+                    break
+                djr -= 1
+        return moves
 class King(Piece):
     img = 1
 class Knight(Piece):
@@ -105,8 +142,8 @@ class Knight(Piece):
 
 class Pawn(Piece):
     img = 3
-    def __init__(self):
-        super().__init__(row,col,color)
+    def __init__(self,row,col,color):
+        super().__init__(self,row,col,color)
         self.first = True
         self.queen  = False
         self.pawn = True
