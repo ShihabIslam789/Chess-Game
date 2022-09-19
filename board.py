@@ -61,12 +61,59 @@ class Board:
         self.board [6][6] = Pawn(6,6,"w")
         self.board [6][7] = Pawn(6,7,"w")
 
+        self.p1Name = "Player 1"
+        self.p2Name = "Player 2"
 
-    def draw(self, win):
+        self.turn = 'w'
+
+        self.time1 = 900
+        self.time2 = 900
+
+        self.storedTime1 = 0
+        self.storedTime2 = 0
+
+        self.winner = None
+
+        self.startTime = time.time()
+
+    def update_moves(self):
         for i in range(self.rows):
-            for j in range (self.cols):
+            for j in range(self.cols):
                 if self.board[i][j] != 0:
-                    self.board[i][j].draw(win)
+                    self.board[i][j].update_valid_moves(self.board)
+    
+    def draw(self, win):
+        if self.last and color == self.turn:
+            y,x = self.last[0]
+            y1,x1 = self.last[1]
+
+            xx = (4-x) + round(self.startX + (x * self.rect[2] / 8))
+            yy = 3 + round(self.startY + (y * self.rect[3]/8))
+            pygame.draw.circle(win, (0,0,255),(xx +32, yy + 30 ),34,4)
+            xx1 = (4 - x) + round(self.startX + (x1 * self.rect[2] / 8))
+            yy1 = 3+ round(self.startY + (y1 * self.rect[3] / 8))
+            pygame.draw.circle(win, (0, 0, 255), (xx1 + 32, yy1 + 30), 34, 4)
+
+        s = None
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if self.board[i][j] != 0:
+                    self.board[i][j].draw (win,color)
+                    if self.board[i][j].isSelected:
+                        s = (i,j)
+
+    def get_danger_moves(self,color):
+        danger_moves = []
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if self.board[i][j] != 0:
+                    if self.board[i][j].king and self.board[i][j].color == color:
+                        king_pos = (j, i)
+
+        if king_pos in danger_moves:
+            return True
+
+        return False
 
 
     def select(select,row,col):
