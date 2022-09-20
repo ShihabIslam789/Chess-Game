@@ -114,6 +114,19 @@ class Board:
 
 
         return danger_moves
+    
+    def is_checked(self,color):
+        self.update_moves()
+        danger_moves = self.get_danger_moves(color)
+        king_pos = (-1,-1)
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if self.board [i][j] != 0:
+                    if self.board[i][j].king and self.board[i][j].color == color:
+                        king_pos = (j, i)
+
+        if king_pos in danger_moves:
+            return True
 
 
 
