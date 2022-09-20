@@ -82,7 +82,7 @@ class Board:
                 if self.board[i][j] != 0:
                     self.board[i][j].update_valid_moves(self.board)
     
-    def draw(self, win):
+    def draw(self, win,color):
         if self.last and color == self.turn:
             y,x = self.last[0]
             y1,x1 = self.last[1]
@@ -107,13 +107,14 @@ class Board:
         for i in range(self.rows):
             for j in range(self.cols):
                 if self.board[i][j] != 0:
-                    if self.board[i][j].king and self.board[i][j].color == color:
-                        king_pos = (j, i)
+                    if self.board[i][j].color != color:
+                        for move in self.board[i][j].move_list:
+                            danger_moves.append(move)
+                    
 
-        if king_pos in danger_moves:
-            return True
 
-        return False
+        return danger_moves
+
 
 
     def select(select,row,col):
