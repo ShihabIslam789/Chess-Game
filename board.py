@@ -226,4 +226,40 @@ def check_mate(self,color):
             return danger_count == len(valid_moves)
         
     return False
-    
+
+
+def move(self, start, end, color):
+        checkedBefore = self.is_checked(color)
+        changed = True
+        nBoard = self.board[:]
+        if nBoard[start[0]][start[1]].pawn:
+            nBoard[start[0]][start[1]].first = False
+
+        nBoard[start[0]][start[1]].change_pos((end[0], end[1]))
+        nBoard[end[0]][end[1]] = nBoard[start[0]][start[1]]
+        nBoard[start[0]][start[1]] = 0
+        self.board = nBoard
+
+        if self.is_checked(color) or (checkedBefore and self.is_checked(color)):
+            changed = False
+            nBoard = self.board[:]
+            if nBoard[end[0]][end[1]].pawn:
+                nBoard[end[0]][end[1]].first = True
+
+            nBoard[end[0]][end[1]].change_pos((start[0], start[1]))
+            nBoard[start[0]][start[1]] = nBoard[end[0]][end[1]]
+            nBoard[end[0]][end[1]] = 0
+            self.board = nBoard
+        else:
+            self.reset_selected()
+
+        self.update_moves()
+        if changed:
+            self.last = [start, end]
+            if self.turn == "w":
+                self.storedTime1 += (time.time() - self.startTime)
+            else:
+                self.storedTime2 += (time.time() - self.startTime)
+            self.startTime = time.time()
+
+        return changed

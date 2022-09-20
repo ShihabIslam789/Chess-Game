@@ -44,13 +44,13 @@ class Piece:
         self.king = False
         self.pawn = False
 
-    def update_valid_moves(self):
+    def update_valid_moves(self,board):
         self.move_list = self.valid_moves(board)
 
     def isSelected(self):
         return self.selected
 
-    def draw(self, win):
+    def draw(self, win,color):
         if self.color == "w":
             drawThis = W[self.img]
         else:
@@ -385,7 +385,7 @@ class Queen(Piece):
             djL += 1
 
         for di in range(i - 1, -1, -1):
-            if djR > -1:
+            if djr > -1:
                 p = board[di][djr]
                 if p == 0:
                     moves.append((djr, di))
