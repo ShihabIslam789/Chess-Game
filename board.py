@@ -197,4 +197,10 @@ def select(self, col, row, color):
             else:
                 self.turn = "w"
                 self.reset_selected()
-                
+
+
+def reset_selected(self):
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if self.board[i][j] != 0:
+                    self.board[i][j].selected = False
