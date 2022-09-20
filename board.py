@@ -130,12 +130,71 @@ class Board:
 
 
 
-    def select(select,row,col):
+def select(self, col, row, color):
+        changed = False
+        prev = (-1, -1)
         for i in range(self.rows):
             for j in range(self.cols):
                 if self.board[i][j] != 0:
-                    self.board[i][j].selected = False
-        
+                    if self.board[i][j].selected:
+                        prev = (i, j)
 
-        if self.board[row][col] != 0:
-            self.board[row][col].selected = True
+        # if piece
+        if self.board[row][col] == 0 and prev!=(-1,-1):
+            moves = self.board[prev[0]][prev[1]].move_list
+            if (col, row) in moves:
+                changed = self.move(prev, (row, col), color)
+
+        else:
+            if prev == (-1,-1):
+                self.reset_selected()
+                if self.board[row][col] != 0:
+                    self.board[row][col].selected = True
+            else:
+                if self.board[prev[0]][prev[1]].color != self.board[row][col].color:
+                    moves = self.board[prev[0]][prev[1]].move_list
+                    if (col, row) in moves:
+                        changed = self.move(prev, (row, col), color)
+
+                    if self.board[row][col].color == color:
+                        self.board[row][col].selected = True
+
+                else:
+                    if self.board[row][col].color == color:
+                        #castling
+                        self.reset_selected()
+                        if self.board[prev[0]][prev[1]].moved == False and self.board[prev[0]][prev[1]].rook and self.board[row][col].king and col != prev[1] and prev!=(-1,-1):
+                            castle = True
+                            if prev[1] < col:
+                                for j in range(prev[1]+1, col):
+                                    if self.board[row][j] != 0:
+                                        castle = False
+
+                                if castle:
+                                    changed = self.move(prev, (row, 3), color)
+                                    changed = self.move((row,col), (row, 2), color)
+                                if not changed:
+                                    self.board[row][col].selected = True
+
+                            else:
+                                for j in range(col+1,prev[1]):
+                                    if self.board[row][j] != 0:
+                                        castle = False
+
+                                if castle:
+                                    changed = self.move(prev, (row, 6), color)
+                                    changed = self.move((row,col), (row, 5), color)
+                                if not changed:
+                                    self.board[row][col].selected = True
+                            
+                        else:
+                            self.board[row][col].selected = True
+
+        if changed:
+            if self.turn == "w":
+                self.turn = "b"
+                self.reset_selected()
+            else:
+                self.turn = "w"
+                self.reset_selected()
+                
