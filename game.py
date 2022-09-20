@@ -1,11 +1,48 @@
+
 import pygame
 import os
+from client import  network
 import time
+import pickle
+pygame.font.init()
 
 
 board = pygame.transform.scale(pygame.image.load(os.path.join("images","board.png")), (750,750))
 chessbg = pygame.image.load(os.path.join("images","chess.bg,jpg"))
 rect = (113,113,525,525)
+
+turn = "w"
+
+def menu_screen(win, name):
+    global bo, chessbg
+    run = True
+    offline = False
+
+    while run:
+        win.blit(chessbg,(0,0))
+        small_font = pygame.font.SysFont("comicsans", 50)
+
+        if offline:
+            off = small_font.render("Server Offline, Try again Later...",1, (255,0,0))
+            win.blit(off, (width / 2 - off.get_width()/ 2, 500))
+
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                run = False
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                offline = False
+                try:
+                    bo = connect()
+                    run = False
+                    main()
+                    break
+                except:
+                    print("Server Offline")
+                    offline = True
 
 def redraw_gamewindow():
     global win, bo
