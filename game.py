@@ -1,4 +1,5 @@
 
+from tkinter import EventType
 import pygame
 import os
 from client import  network
@@ -106,6 +107,17 @@ def end_screen(win,text):
 
     pygame.time.set_timer(pygame.USEREVENT + 1, 3000)
 
+    run = True
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.QUIT()
+                quit()
+                run = False
+            elif event.type == pygame.KEYDOWN:
+                run = False
+            elif event.type == pygame.USEREVENT+1:
+                run = False
 
 def click():
     #return pos(x,y) ranges of 0-7
