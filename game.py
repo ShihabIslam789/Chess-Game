@@ -1,5 +1,5 @@
 
-from tkinter import EventType
+from tkinter import N, EventType
 import pygame
 import os
 from client import  network
@@ -125,13 +125,40 @@ def click():
     y = pos[1]
     if rect[0] < x < rect[0] + rect[2]:
         if rect[1] < y < rect[1] + rect[3]:
-            divX = x - rect[0] 
-            divY = y - rect[0] 
-            i = int(divX/(rect[2]/8))
-            j = int(divY/(rect[3]/8))
-            return (i,j)
+            divX = x - rect[0]
+            divY = y - rect[1]
+            i = int(divX / (rect[2]/8))
+            j = int(divY / (rect[3]/8))
+            return i, j
+
+    return -1, -1
+
+def connect():
+    global n
+    n = network()
+    return n.board
+
+
 def main():
-    global board
+    global bo,turn,name
+    color = bo.start_user
+    count = 0
+    bo = n.send("update_moves")
+    bo = n.send("name" + name)
+    clock = pygame.time.Clock()
+    run = True
+
+    while run:
+        if not color == "s":
+            p1Time = bo.time1
+            p2Time = bo.time2
+            if count == 60:
+                bo = n.send("get")
+                count = 0
+            else:
+                count += 1
+            clock.tick(30)
+            
     bo = board(8,8)
     clock = pygame.time.Clock()
     run = True
