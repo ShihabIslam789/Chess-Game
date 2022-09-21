@@ -1,5 +1,5 @@
 
-from tkinter import N, EventType
+from tkinter import N, _ExceptionReportingCallback, EventType
 import pygame
 import os
 from client import  network
@@ -158,7 +158,28 @@ def main():
             else:
                 count += 1
             clock.tick(30)
-            
+        try:
+            redraw_gamewindow(win,bo,p1Time,p2Time,color,bo.ready)
+        except Exception as e:
+            print(e)
+            end_screen(win, "other player left")
+            run = False
+            break
+        if not color == "s":
+            if p1Time <= 0:
+                bo = n.send("winner b")
+            elif p2Time <= 0:
+                bo = n.send("winner w")
+        
+        if bo.winner == "w":
+            end_screen(win, "White is Victorius!")
+            run = False
+        elif bo.winner == "b":
+            end_screen(win, "Black is Victorius!")
+            run = False 
+        
+        for event in pygame.event.get()
+
     bo = board(8,8)
     clock = pygame.time.Clock()
     run = True
