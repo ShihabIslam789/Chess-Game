@@ -71,6 +71,32 @@ def redraw_gamewindow(win,bo,p1,p2,color, ready):
         txt3 = font.render("SPECTATOR MODE", 1, (255, 0, 0))
         win.blit(txt3, (width/2-txt3.get_width()/2, 10))
     
+    if not ready:
+        show = "Waiting for Player"
+        if color == "s":
+            show = "Waiting for Players"
+        font = pygame.font.SysFont("comicsans", 80)
+        txt = font.render(show, 1, (255, 0, 0))
+        win.blit(txt, (width/2 - txt.get_width()/2, 300))
+
+    if not color == "s":
+        font = pygame.font.SysFont("comicsans", 30)
+        if color == "w":
+            txt3 = font.render("YOU ARE WHITE", 1, (255, 0, 0))
+            win.blit(txt3, (width / 2 - txt3.get_width() / 2, 10))
+        else:
+            txt3 = font.render("YOU ARE BLACK", 1, (255, 0, 0))
+            win.blit(txt3, (width / 2 - txt3.get_width() / 2, 10))
+
+        if bo.turn == color:
+            txt3 = font.render("YOUR TURN", 1, (255, 0, 0))
+            win.blit(txt3, (width / 2 - txt3.get_width() / 2, 700))
+        else:
+            txt3 = font.render("THEIR TURN", 1, (255, 0, 0))
+            win.blit(txt3, (width / 2 - txt3.get_width() / 2, 700))
+
+    pygame.display.update()
+
 
 def click():
     #return pos(x,y) ranges of 0-7
