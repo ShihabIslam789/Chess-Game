@@ -97,6 +97,15 @@ def redraw_gamewindow(win,bo,p1,p2,color, ready):
 
     pygame.display.update()
 
+def end_screen(win,text):
+    pygame.font.init()
+    font = pygame.font.SysFont("comicsans", 80)
+    txt = font.render(text,1,(255,0,0))
+    win.blit(txt, (width/2 - txt.get_width()/2, 300))
+    pygame.display.update()
+
+    pygame.time.set_timer(pygame.USEREVENT + 1, 3000)
+
 
 def click():
     #return pos(x,y) ranges of 0-7
