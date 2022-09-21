@@ -119,7 +119,7 @@ def end_screen(win,text):
             elif event.type == pygame.USEREVENT+1:
                 run = False
 
-def click():
+def click(pos):
     #return pos(x,y) ranges of 0-7
     x = pos[0]
     y = pos[1]
@@ -178,33 +178,41 @@ def main():
             end_screen(win, "Black is Victorius!")
             run = False 
         
-        for event in pygame.event.get()
-
-    bo = board(8,8)
-    clock = pygame.time.Clock()
-    run = True
-    while run:
-        clock.time(30)
-        redraw_gamewindow()
-
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run =  False
+            if event.type ==pygame.QUIT():
+                run = False
                 quit()
                 pygame.quit()
             
-            if event.type == pygame.mousemotion:
-                pass
+            if event.type == pygame.KEYDOWN:
+                if event.type == pygame.k_q and color != "s":
+                    #quitting game
+                    if color == "w":
+                        bo = n.send("winner b")
+                    else:
+                        bo - n.send("winner w")
 
-            if event.type == pygame.mousebuttondown:
-                pos = pygame.mouse.get_pos()
-                i,j = click(pos)
-                #bo.board.selected[i][j].selected = True        
-                bo.selected(i,j)
+                if event.key == pygame.K_RIGHT:
+                    bo = n.send("forward")
+
+                if event.key == pygame.K_LEFT:
+                    bo = n.send("back")
+
+            if event.type == pygame.MOUSEBUTTONUP and color != "s":
+                if color == bo.turn and bo.ready:
+                    pos = pygame.mouse.get_pos()
+                    bo = n.send("update moves")
+                    i,j = click(pos)
+                    bo = n.send("Select" + str(i) + " " + str(j) + " " + color)
+
+    n.disconnect()
+    bo = 0
+    menu_screen(win)
+
+
                 
-
+name = input("Please type your name: ")
 width = 750
 height = 750
 win = pygame.display.set_mode((width,height))
 pygame.display.set_caption("Chess Game")
-main()
