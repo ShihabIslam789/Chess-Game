@@ -44,11 +44,16 @@ def menu_screen(win, name):
                     print("Server Offline")
                     offline = True
 
-def redraw_gamewindow():
-    global win, bo
+def redraw_gamewindow(win,bo,p1,p2,color, ready):
     win.blit(board,(0,0))
-    bo.draw(win)
-    pygame.display.update()
+    bo.draw(win, color)
+
+    formatTime1 = str(int(p1//60)) + ":" + str(int(p1%60))
+    formatTime2 = str(int(p2 // 60)) + ":" + str(int(p2 % 60))
+    if int(p1%60) < 10:
+        formatTime1 = formatTime1[:-1] + "0" + formatTime1[-1]
+    if int(p2%60) < 10:
+        formatTime2 = formatTime2[:-1] + "0" + formatTime2[-1]
 
 def click():
     #return pos(x,y) ranges of 0-7
