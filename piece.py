@@ -1,7 +1,7 @@
-from operator import truediv
+
 import pygame
 import os
-from piece import Bishop
+
 
 
 black_bishop = pygame.image.load(os.path.join("img","black_bishop.png"))
