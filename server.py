@@ -121,3 +121,46 @@ def threaded_client(conn,game,spec = False):
             pass
         print("[DISCONNECT] Player", name, "left game", game)
         conn.close()
+
+    else:
+        available_games = list(games.keys())
+        game_ind = 0
+        bo = games[available_games[game_ind]]
+        bo.start_user = "s"
+        data_string = pickle.dumps(bo)
+        conn.send(data_string)
+
+        while True:
+            available_games = list(games.keys())
+            bo = games[available_games[game_ind]]
+            try:
+                d = conn.recv(128)
+                data = d.decode("utf-8")
+                if not d:
+                    break
+                else:
+                    try:
+                        if data == "forward":
+                            print("[SPECTATOR] Moved Games forward")
+                            game_ind += 1
+                            if game_ind >= len(available_games):
+                                game_ind = 0
+                        elif data == "back":
+                            print("[SPECTATOR] Moved Games back")
+                            game_ind -= 1
+                            if game_ind < 0:
+                                game_ind = len(available_games) -1
+
+                        bo = games[available_games[game_ind]]
+                    except:
+                        print("[ERROR] Invalid Game Recieved from Spectator")
+
+                    sendData = pickle.dumps(bo)
+                    conn.sendall(sendData)
+
+            except Exception as e:
+                print(e)
+
+        print("[DISCONNECT] Spectator left game", game)
+        specs -= 1
+        conn.close()
