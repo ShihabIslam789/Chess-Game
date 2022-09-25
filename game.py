@@ -32,17 +32,17 @@ except:
 
 import pygame
 import os
-from client import  network
 import time
+from client import Network
 import pickle
 pygame.font.init()
 
-
-board = pygame.transform.scale(pygame.image.load(os.path.join("imag","board.png")), (750,750))
-chessbg = pygame.image.load(os.path.join("img","chess.bg,jpg"))
+board = pygame.transform.scale(pygame.image.load(os.path.join("img","board_alt.png")), (750, 750))
+chessbg = pygame.image.load(os.path.join("img", "chessbg.png"))
 rect = (113,113,525,525)
 
 turn = "w"
+
 
 def menu_screen(win, name):
     global bo, chessbg
@@ -50,12 +50,12 @@ def menu_screen(win, name):
     offline = False
 
     while run:
-        win.blit(chessbg,(0,0))
+        win.blit(chessbg, (0,0))
         small_font = pygame.font.SysFont("comicsans", 50)
-
+        
         if offline:
-            off = small_font.render("Server Offline, Try again Later...",1, (255,0,0))
-            win.blit(off, (width / 2 - off.get_width()/ 2, 500))
+            off = small_font.render("Server Offline, Try Again Later...", 1, (255, 0, 0))
+            win.blit(off, (width / 2 - off.get_width() / 2, 500))
 
         pygame.display.update()
 
@@ -63,7 +63,7 @@ def menu_screen(win, name):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 run = False
-            
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 offline = False
                 try:
@@ -75,8 +75,10 @@ def menu_screen(win, name):
                     print("Server Offline")
                     offline = True
 
-def redraw_gamewindow(win,bo,p1,p2,color, ready):
-    win.blit(board,(0,0))
+
+    
+def redraw_gameWindow(win, bo, p1, p2, color, ready):
+    win.blit(board, (0, 0))
     bo.draw(win, color)
 
     formatTime1 = str(int(p1//60)) + ":" + str(int(p1%60))
@@ -101,7 +103,7 @@ def redraw_gamewindow(win,bo,p1,p2,color, ready):
     if color == "s":
         txt3 = font.render("SPECTATOR MODE", 1, (255, 0, 0))
         win.blit(txt3, (width/2-txt3.get_width()/2, 10))
-    
+
     if not ready:
         show = "Waiting for Player"
         if color == "s":
@@ -129,44 +131,135 @@ def redraw_gamewindow(win,bo,p1,p2,color, ready):
     pygame.display.update()
 
 
+def end_screen(win, text):
+    pygame.font.init()
+    font = pygame.font.SysFont("comicsans", 80)
+    txt = font.render(text,1, (255,0,0))
+    win.blit(txt, (width / 2 - txt.get_width() / 2, 300))
+    pygame.display.update()
+
+    pygame.time.set_timer(pygame.USEREVENT+1, 3000)
+
+    run = True
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+                run = False
+            elif event.type == pygame.KEYDOWN:
+                run = False
+            elif event.type == pygame.USEREVENT+1:
+                run = False
+
+
 def click(pos):
-    #return pos(x,y) ranges of 0-7
+    """
+    :return: pos (x, y) in range 0-7 0-7
+    """
     x = pos[0]
     y = pos[1]
     if rect[0] < x < rect[0] + rect[2]:
         if rect[1] < y < rect[1] + rect[3]:
-            divX = x - rect[0] 
-            divY = y - rect[0] 
-            i = int(divX/(rect[2]/8))
-            j = int(divY/(rect[3]/8))
-            return (i,j)
+            divX = x - rect[0]
+            divY = y - rect[1]
+            i = int(divX / (rect[2]/8))
+            j = int(divY / (rect[3]/8))
+            return i, j
+
+    return -1, -1
+
+
+def connect():
+    global n
+    n = Network()
+    return n.board
+
+
 def main():
-    global board
-    bo = board(8,8)
+    global turn, bo, name
+
+    color = bo.start_user
+    count = 0
+
+    bo = n.send("update_moves")
+    bo = n.send("name " + name)
     clock = pygame.time.Clock()
     run = True
+
     while run:
-        clock.time(30)
-        redraw_gamewindow()
+        if not color == "s":
+            p1Time = bo.time1
+            p2Time = bo.time2
+            if count == 60:
+                bo = n.send("get")
+                count = 0
+            else:
+                count += 1
+            clock.tick(30)
+
+        try:
+            redraw_gameWindow(win, bo, p1Time, p2Time, color, bo.ready)
+        except Exception as e:
+            print(e)
+            end_screen(win, "Other player left")
+            run = False
+            break
+
+        if not color == "s":
+            if p1Time <= 0:
+                bo = n.send("winner b")
+            elif p2Time <= 0:
+                bo = n.send("winner w")
+
+            if bo.check_mate("b"):
+                bo = n.send("winner b")
+            elif bo.check_mate("w"):
+                bo = n.send("winner w")
+
+        if bo.winner == "w":
+            end_screen(win, "White is the Winner!")
+            run = False
+        elif bo.winner == "b":
+            end_screen(win, "Black is the winner")
+            run = False
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run =  False
+                run = False
                 quit()
                 pygame.quit()
-            
-            if event.type == pygame.mousemotion:
-                pass
 
-            if event.type == pygame.mousebuttondown:
-                pos = pygame.mouse.get_pos()
-                i,j = click(pos)
-                #bo.board.selected[i][j].selected = True        
-                bo.selected(i,j)
-                
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q and color != "s":
+                    # quit game
+                    if color == "w":
+                        bo = n.send("winner b")
+                    else:
+                        bo = n.send("winner w")
 
+                if event.key == pygame.K_RIGHT:
+                    bo = n.send("forward")
+
+                if event.key == pygame.K_LEFT:
+                    bo = n.send("back")
+
+
+            if event.type == pygame.MOUSEBUTTONUP and color != "s":
+                if color == bo.turn and bo.ready:
+                    pos = pygame.mouse.get_pos()
+                    bo = n.send("update moves")
+                    i, j = click(pos)
+                    bo = n.send("select " + str(i) + " " + str(j) + " " + color)
+    
+    n.disconnect()
+    bo = 0
+    menu_screen(win)
+
+
+name = input("Please type your name: ")
 width = 750
 height = 750
-win = pygame.display.set_mode((width,height))
+win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Chess Game")
-main()
+menu_screen(win, name)
