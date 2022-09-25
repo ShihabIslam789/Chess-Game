@@ -4,30 +4,30 @@ import os
 from piece import Bishop
 
 
-black_bishop = pygame.image.load(os.path.join("images","black_bishop.png"))
-black_king = pygame.image.load(os.path.join("images","black_king.png"))
-black_knight = pygame.image.load(os.path.join("images","black_knight.png"))
-black_pawn = pygame.image.load(os.path.join("images","black_pawn.png"))
-black_queen = pygame.image.load(os.path.join("images","black_queen.png"))
-black_rook = pygame.image.load(os.path.join("images","black_rook.png"))
+black_bishop = pygame.image.load(os.path.join("img","black_bishop.png"))
+black_king = pygame.image.load(os.path.join("img","black_king.png"))
+black_knight = pygame.image.load(os.path.join("img","black_knight.png"))
+black_pawn = pygame.image.load(os.path.join("img","black_pawn.png"))
+black_queen = pygame.image.load(os.path.join("img","black_queen.png"))
+black_rook = pygame.image.load(os.path.join("img","black_rook.png"))
 
-white_bishop = pygame.image.load(os.path.join("images","white_bishop.png"))
-white_king = pygame.image.load(os.path.join("images","white_king.png"))
-white_knight = pygame.image.load(os.path.join("images","white_knight.png"))
-white_pawn = pygame.image.load(os.path.join("images","white_pawn.png"))
-white_queen = pygame.image.load(os.path.join("images","white_queen.png"))
-white_rook = pygame.image.load(os.path.join("images","white_rook.png"))
+white_bishop = pygame.image.load(os.path.join("img","white_bishop.png"))
+white_king = pygame.image.load(os.path.join("img","white_king.png"))
+white_knight = pygame.image.load(os.path.join("img","white_knight.png"))
+white_pawn = pygame.image.load(os.path.join("img","white_pawn.png"))
+white_queen = pygame.image.load(os.path.join("img","white_queen.png"))
+white_rook = pygame.image.load(os.path.join("img","white_rook.png"))
 
 b = [black_bishop,black_king,black_knight,black_pawn, black_queen, black_rook]
 w = [white_bishop,white_king,white_knight,white_pawn, white_queen, white_rook]
 B =[]
 W =[]
 
-for images in b:
-    B.append(pygame.transform.scale(images, (55,55)))
+for img in b:
+    B.append(pygame.transform.scale(img, (55,55)))
 
-for images in w:
-    W.append(pygame.transform.scale(images(55,55)))
+for img in w:
+    W.append(pygame.transform.scale(img(55,55)))
 
 class Piece:
     img = -1
