@@ -66,7 +66,7 @@ def threaded_client(conn,game,spec = False):
         while True:
             if game not in games:
                 break
-            
+
             try:
                 d = conn.recv(8192 * 3)
                 data = d.decode("utf-8")
@@ -96,3 +96,28 @@ def threaded_client(conn,game,spec = False):
                             bo.p2Name = name
                         elif currentId == "w":
                             bo.p1Name = name
+
+                    #print("Recieved board from", currentId, "in game", game)
+
+                    if bo.ready:
+                        if bo.turn == "w":
+                            bo.time1 = 900 - (time.time() - bo.startTime) - bo.storedTime1
+                        else:
+                            bo.time2 = 900 - (time.time() - bo.startTime) - bo.storedTime2
+
+                    sendData = pickle.dumps(bo)
+                    #print("Sending board to player", currentId, "in game", game)
+
+                conn.sendall(sendData)
+
+            except Exception as e:
+                print(e)
+        
+        connections -= 1
+        try:
+            del games[game]
+            print("[GAME] Game", game, "ended")
+        except:
+            pass
+        print("[DISCONNECT] Player", name, "left game", game)
+        conn.close()
