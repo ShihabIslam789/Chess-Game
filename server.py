@@ -17,7 +17,7 @@ try:
 except socket.error as e:
     print(str(e))
 
-s.listen(server,port)
+s.listen()
 print("[START] Waiting for a connection")
 
 connections = 0
