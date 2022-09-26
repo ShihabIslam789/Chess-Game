@@ -17,7 +17,7 @@ try:
 except socket.error as e:
     print(str(e))
 
-s.listen()
+s.listen(server,port)
 print("[START] Waiting for a connection")
 
 connections = 0
@@ -31,15 +31,16 @@ def read_specs():
     global spectartor_ids
 
     spectartor_ids = []
-    try: 
-        with open ("spec.txt", "r") as f:
+    try:
+        with open("specs.txt", "r") as f:
             for line in f:
                 spectartor_ids.append(line.strip())
     except:
         print("[ERROR] No specs.txt file found, creating one...")
         open("specs.txt", "w")
 
-def threaded_client(conn,game,spec = False):
+
+def threaded_client(conn, game, spec=False):
     global pos, games, currentId, connections, specs
 
     if not spec:
@@ -164,8 +165,8 @@ def threaded_client(conn,game,spec = False):
         print("[DISCONNECT] Spectator left game", game)
         specs -= 1
         conn.close()
-    
-    
+
+
 while True:
     read_specs()
     if connections < 6:

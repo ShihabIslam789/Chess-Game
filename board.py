@@ -1,11 +1,12 @@
 from piece import Bishop
 from piece import King
 from piece import Rook
+from piece import Pawn
 from piece import Queen
 from piece import Knight
-from piece import Pawn
 import time
 import pygame
+
 
 class Board:
     rect = (113, 113, 525, 525)
@@ -23,48 +24,46 @@ class Board:
 
         self.board = [[0 for x in range(8)] for _ in range(rows)]
 
-    #black chess piece positions
-        self.board [0][0] = Rook(0,0,"b")
-        self.board [0][1] = Knight(0,1, "b")
-        self.board [0][2] = Bishop(0,2, "b")
-        self.board [0][3] = Queen(0,3, "b")
-        self.board [0][4] = King(0,4,"b")
-        self.board [0][5] = Bishop(0,5,"b")
-        self.board [0][6] = Knight(0,6,"b")
-        self.board[ 0][7] = Rook(0,7,"b")   
+        self.board[0][0] = Rook(0, 0, "b")
+        self.board[0][1] = Knight(0, 1, "b")
+        self.board[0][2] = Bishop(0, 2, "b")
+        self.board[0][3] = Queen(0, 3, "b")
+        self.board[0][4] = King(0, 4, "b")
+        self.board[0][5] = Bishop(0, 5, "b")
+        self.board[0][6] = Knight(0, 6, "b")
+        self.board[0][7] = Rook(0, 7, "b")
 
-        self.board [1][0] = Pawn(1,0,"b")
-        self.board [1][1] = Pawn(1,1, "b")
-        self.board [1][2] = Pawn(1,2, "b")
-        self.board [1][3] = Pawn(1,3, "b")
-        self.board [1][4] = Pawn(1,4,"b")
-        self.board [1][5] = Pawn(1,5,"b")
-        self.board [1][6] = Pawn(1,6,"b")
-        self.board [1][7] = Pawn(1,7,"b")
+        self.board[1][0] = Pawn(1, 0, "b")
+        self.board[1][1] = Pawn(1, 1, "b")
+        self.board[1][2] = Pawn(1, 2, "b")
+        self.board[1][3] = Pawn(1, 3, "b")
+        self.board[1][4] = Pawn(1, 4, "b")
+        self.board[1][5] = Pawn(1, 5, "b")
+        self.board[1][6] = Pawn(1, 6, "b")
+        self.board[1][7] = Pawn(1, 7, "b")
 
-    #white chess piece positions
-        self.board [7][0] = Rook(7,0,"w")
-        self.board [7][1] = Knight(7,1, "w")
-        self.board [7][2] = Bishop(7,2, "w")
-        self.board [7][3] = Queen(7,3, "w")
-        self.board [7][4] = King(7,4,"w")
-        self.board [7][5] = Bishop(7,5,"w")
-        self.board [7][6] = Knight(7,6,"bw")
-        self.board [7][7] = Rook(7,7,"w")
+        self.board[7][0] = Rook(7, 0, "w")
+        self.board[7][1] = Knight(7, 1, "w")
+        self.board[7][2] = Bishop(7, 2, "w")
+        self.board[7][3] = Queen(7, 3, "w")
+        self.board[7][4] = King(7, 4, "w")
+        self.board[7][5] = Bishop(7, 5, "w")
+        self.board[7][6] = Knight(7, 6, "w")
+        self.board[7][7] = Rook(7, 7, "w")
 
-        self.board [6][0] = Pawn(6,0,"w")
-        self.board [6][1] = Pawn(6,1, "w")
-        self.board [6][2] = Pawn(6,2, "w")
-        self.board [6][3] = Pawn(6,3, "w")
-        self.board [6][4] = Pawn(6,4,"w")
-        self.board [6][5] = Pawn(6,5,"w")
-        self.board [6][6] = Pawn(6,6,"w")
-        self.board [6][7] = Pawn(6,7,"w")
+        self.board[6][0] = Pawn(6, 0, "w")
+        self.board[6][1] = Pawn(6, 1, "w")
+        self.board[6][2] = Pawn(6, 2, "w")
+        self.board[6][3] = Pawn(6, 3, "w")
+        self.board[6][4] = Pawn(6, 4, "w")
+        self.board[6][5] = Pawn(6, 5, "w")
+        self.board[6][6] = Pawn(6, 6, "w")
+        self.board[6][7] = Pawn(6, 7, "w")
 
         self.p1Name = "Player 1"
         self.p2Name = "Player 2"
 
-        self.turn = 'w'
+        self.turn = "w"
 
         self.time1 = 900
         self.time2 = 900
@@ -81,15 +80,15 @@ class Board:
             for j in range(self.cols):
                 if self.board[i][j] != 0:
                     self.board[i][j].update_valid_moves(self.board)
-    
-    def draw(self, win,color):
-        if self.last and color == self.turn:
-            y,x = self.last[0]
-            y1,x1 = self.last[1]
 
-            xx = (4-x) + round(self.startX + (x * self.rect[2] / 8))
-            yy = 3 + round(self.startY + (y * self.rect[3]/8))
-            pygame.draw.circle(win, (0,0,255),(xx +32, yy + 30 ),34,4)
+    def draw(self, win, color):
+        if self.last and color == self.turn:
+            y, x = self.last[0]
+            y1, x1 = self.last[1]
+
+            xx = (4 - x) +round(self.startX + (x * self.rect[2] / 8))
+            yy = 3 + round(self.startY + (y * self.rect[3] / 8))
+            pygame.draw.circle(win, (0,0,255), (xx+32, yy+30), 34, 4)
             xx1 = (4 - x) + round(self.startX + (x1 * self.rect[2] / 8))
             yy1 = 3+ round(self.startY + (y1 * self.rect[3] / 8))
             pygame.draw.circle(win, (0, 0, 255), (xx1 + 32, yy1 + 30), 34, 4)
@@ -98,11 +97,12 @@ class Board:
         for i in range(self.rows):
             for j in range(self.cols):
                 if self.board[i][j] != 0:
-                    self.board[i][j].draw (win,color)
+                    self.board[i][j].draw(win, color)
                     if self.board[i][j].isSelected:
-                        s = (i,j)
+                        s = (i, j)
 
-    def get_danger_moves(self,color):
+
+    def get_danger_moves(self, color):
         danger_moves = []
         for i in range(self.rows):
             for j in range(self.cols):
@@ -110,27 +110,25 @@ class Board:
                     if self.board[i][j].color != color:
                         for move in self.board[i][j].move_list:
                             danger_moves.append(move)
-                    
-
 
         return danger_moves
-    
-    def is_checked(self,color):
+
+    def is_checked(self, color):
         self.update_moves()
         danger_moves = self.get_danger_moves(color)
-        king_pos = (-1,-1)
+        king_pos = (-1, -1)
         for i in range(self.rows):
             for j in range(self.cols):
-                if self.board [i][j] != 0:
+                if self.board[i][j] != 0:
                     if self.board[i][j].king and self.board[i][j].color == color:
                         king_pos = (j, i)
 
         if king_pos in danger_moves:
             return True
 
+        return False
 
-
-def select(self, col, row, color):
+    def select(self, col, row, color):
         changed = False
         prev = (-1, -1)
         for i in range(self.rows):
@@ -198,37 +196,35 @@ def select(self, col, row, color):
                 self.turn = "w"
                 self.reset_selected()
 
-
-def reset_selected(self):
+    def reset_selected(self):
         for i in range(self.rows):
             for j in range(self.cols):
                 if self.board[i][j] != 0:
                     self.board[i][j].selected = False
 
-def check_mate(self,color):
-    if self.is_checked(color):
-        king = None
-        for i in range(self.rows):
-            for i in range(self.cols):
-                if self.baord[i][j] != 0:
-                    if self.board[i][j].king and self.board[i][j].color == color:
+    def check_mate(self, color):
+        '''if self.is_checked(color):
+            king = None
+            for i in range(self.rows):
+                for j in range(self.cols):
+                    if self.board[i][j] != 0:
+                        if self.board[i][j].king and self.board[i][j].color == color:
                             king = self.board[i][j]
-        if king is not None:
-            valid_moves = king.valid_moves(self.board)
+            if king is not None:
+                valid_moves = king.valid_moves(self.board)
 
-            danger_moves = self.get_danger_moves(color)
+                danger_moves = self.get_danger_moves(color)
 
-            danger_count = 0
+                danger_count = 0
 
-            for move in valid_moves:
-                if move in danger_moves:
-                    danger_count += 1
-            return danger_count == len(valid_moves)
-        
-    return False
+                for move in valid_moves:
+                    if move in danger_moves:
+                        danger_count += 1
+                return danger_count == len(valid_moves)'''
 
+        return False
 
-def move(self, start, end, color):
+    def move(self, start, end, color):
         checkedBefore = self.is_checked(color)
         changed = True
         nBoard = self.board[:]
@@ -263,3 +259,6 @@ def move(self, start, end, color):
             self.startTime = time.time()
 
         return changed
+
+
+
